@@ -114,16 +114,11 @@ void ShapeVisualization::setShapePosition(const visualization_msgs::InteractiveM
     // this is not supposed to occur , but apparently it does
     if(index==-1){
 
-    //std::cout<<"BROKEN SHAPE ID"<<shape_id<<"\n";
-    //for(int i=0;i<sha.shapes.size();++i)
-    //{
-    //std::cout<<sha.shapes[i].id<<"\n";
-    //}
+    ROS_WARN("shape not in map array");
     return;
 	}
 
 
-std::cout<<"index"<<index<<"\n";
     cob_3d_mapping::fromROSMsg (sha.shapes.at(index), p);
 
     if (feedback->event_type == 2 && feedback->menu_entry_id == 5){
