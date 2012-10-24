@@ -602,8 +602,12 @@ ShapeMarker::createInteractiveMarker ()
     im_ctrl_for_second_marker.always_visible = true;
     im_ctrl_for_second_marker.interaction_mode = visualization_msgs::InteractiveMarkerControl::BUTTON;
 
-
-}
+    createMarker (tri_list, im_ctrl_for_second_marker);
+    deleted_imarker_.controls.push_back(im_ctrl_for_second_marker) ;
+    im_server_->insert (deleted_imarker_ );
+    im_server_ ->applyChanges() ;
+    menu_handler_.apply (*im_server_, deleted_imarker_.name);
+   }
 }
 /**
  * @brief Feedback callback for origin  menu entry
@@ -924,6 +928,11 @@ void ShapeMarker::hideNormal(int untick){
   ss << "normal_" << shape_.id;
   im_server_->erase(ss.str());
   im_server_->applyChanges ();
+  if(!untick){ // when ResetAll is activated
+    menu_handler_.setCheckState (2, interactive_markers::MenuHandler::UNCHECKED);//second menu Entry is display Contour
+    menu_handler_.reApply (*im_server_);
+    im_server_->applyChanges() ;
+  }
 
   if(untick){
     // updating interacted_shapes_ vector
